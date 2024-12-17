@@ -1,0 +1,108 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "UFSCar Delivery API",
+      "version": "1.0.0",
+      "description": "API para gerenciamento de dados de campus, usuários, pedidos, produtos e histórico de entregas na UFSCar"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:3000",
+        "description": "Servidor local"
+      }
+    ],
+    "paths": {
+      "/campus": {
+        "get": {
+          "summary": "Listar todos os campus",
+          "responses": {
+            "200": {
+              "description": "Lista de campus",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "integer" },
+                        "nome": { "type": "string" },
+                        "latitude": { "type": "integer" },
+                        "longitude": { "type": "integer" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/usuario/login": {
+        "post": {
+          "summary": "Login de usuário",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": { "type": "string" },
+                    "senha": { "type": "string" }
+                  },
+                  "required": ["email", "senha"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Token JWT",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "token": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Credenciais inválidas"
+            }
+          }
+        }
+      },
+      "/pedido": {
+        "get": {
+          "summary": "Listar todos os pedidos",
+          "responses": {
+            "200": {
+              "description": "Lista de pedidos",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "string" },
+                        "id_usuario": { "type": "integer" },
+                        "campus_inicial": { "type": "integer" },
+                        "campus_final": { "type": "integer" },
+                        "previsao_entrega": { "type": "string", "format": "date-time" },
+                        "valor_total": { "type": "integer" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
