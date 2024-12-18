@@ -55,6 +55,11 @@ Este projeto é um sistema backend para gestão de entregas entre campus da Univ
 
 ### 3. Instalar Dependências
 
+Se não estiver no diretorio "backend", usar o comando:
+```bash
+cd backend
+```
+
 No diretório do projeto, execute:
 ```bash
 npm install
@@ -66,6 +71,7 @@ Execute o comando:
 ```bash
 npm start
 ```
+
 O servidor estará rodando em [http://localhost:3000](http://localhost:3000).
 
 ### 5. Documentação da API

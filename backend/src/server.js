@@ -1,32 +1,56 @@
 const express = require('express');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
+const swaggerJsdoc = require('swagger-jsdoc');
 require('dotenv').config();
+
+const swaggerOptions = {
+    definition: {
+        openapi: '3.0.0',
+        info: {
+            title: "Logistica UFSCar API",
+            version: "1.0.0",
+            description: "API para gerenciamento de dados de campus, usuários, pedidos, produtos e histórico de entregas na UFSCar"
+        },
+        components: {
+            securitySchemes: {
+                BearerAuth: {
+                    type: 'http',
+                    scheme: 'bearer',
+                    bearerFormat: 'JWT',
+                },
+            },
+        },
+        security: [
+            {
+                BearerAuth: [],
+            },
+        ],
+    },
+    apis: ['./swagger/*.js'],
+};
+
 
 const app = express();
 const port = 3000;
 
 app.use(bodyParser.json());
+app.use(cors());
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+const swaggerDocs = swaggerJsdoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-const campusRoutes = require('./routes/campus');
 const usuarioRoutes = require('./routes/usuario');
 const pedidoRoutes = require('./routes/pedido');
-// const produtoRoutes = require('./routes/produto');
-// const historicoRoutes = require('./routes/historico');
-// const statusRoutes = require('./routes/status');
+const statusRoutes = require('./routes/status');
 
-app.use('/campus', campusRoutes); 
 app.use('/usuario', usuarioRoutes);
-app.use('/pedido', pedidoRoutes); 
-// app.use('/produto', produtoRoutes);
-// app.use('/historico', historicoRoutes);   
-// app.use('/status', statusRoutes); 
+app.use('/pedido', pedidoRoutes);
+app.use('/status', statusRoutes);
 
 app.get('/', (req, res) => {
-    res.send('Bem-vindo à API da UFSCar Delivery! Acesse /api-docs para ver a documentação.');
+    res.send('Bem-vindo à API da Logística UFSCar! Acesse /api-docs para ver a documentação.');
 });
 
 app.listen(port, () => {
