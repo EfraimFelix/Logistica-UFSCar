@@ -4,16 +4,12 @@
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap"
-        rel="stylesheet">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit">
+    <script src="./script/script_pedidos.js"></script>
     <link rel="icon" href="./img/boxes.png">
-    <link rel="stylesheet" href="./script/script_pedidos.js">
     <link rel="stylesheet" type="text/css" href="style/style_pedido.css">
     <link rel="stylesheet" type="text/css" href="style/style_home.css">
     <title>UFSCAR Logistica</title>
@@ -22,13 +18,7 @@
 <body>
     <header class="header">
         <div class="header-menu">
-            <a href="#"><img src="./img/UFSCAR_logotipo.svg" alt="Logotipo UFSCAR"></a>
-            <nav class="header-nav">
-                <ul>
-                    <li><a href="">HOME</a></li>
-                    <li><a href="">PEDIDOS</a></li>
-                </ul>
-            </nav>
+            <a href="./index.html"><img src="./img/UFSCAR_logotipo.svg" alt="Logotipo UFSCAR"></a>
             <div class="header-login">
                 <a href="#">Logado</a>
             </div>
@@ -49,7 +39,7 @@
             <div class="tab-indicator"></div>
         </div>
 
-        <div class="tab-content" id="pedidos"><!-- Card -->
+        <div class="tab-content" id="pedidos">
         </div>
         <div class="tab-content hidden" id="rastreio">Conteúdo de Rastreamento</div>
     </div>
@@ -57,30 +47,30 @@
 </html>
 </body>
 
-  <script>
-      document.addEventListener('DOMContentLoaded', async function () {
-          const pedidosContainer = document.getElementById('pedidos');
-        
-          try {
-              const token = localStorage.getItem('token'); // Get stored JWT token
-              const response = await fetch('http://localhost:3000/pedido', {
-                  method: 'GET',
-                  headers: {
-                      'Authorization': `Bearer ${token}`,
-                      'Content-Type': 'application/json'
-                  }
-              });
+<script>
+    document.addEventListener('DOMContentLoaded', async function () {
+        const pedidosContainer = document.getElementById('pedidos');
 
-              if (!response.ok) {
-                  throw new Error('Falha ao carregar pedidos');
-              }
+        try {
+            const token = localStorage.getItem('token'); // Get stored JWT token
+            const response = await fetch('http://localhost:3000/pedido', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
 
-              const pedidos = await response.json();
-              pedidosContainer.innerHTML = ''; // Clear existing content
+            if (!response.ok) {
+                throw new Error('Falha ao carregar pedidos');
+            }
 
-              pedidos.forEach(pedido => {
-                  const lastStatus = pedido.historico[pedido.historico.length - 1];
-                  const orderCard = `
+            const pedidos = await response.json();
+            pedidosContainer.innerHTML = ''; // Clear existing content
+
+            pedidos.forEach(pedido => {
+                const lastStatus = pedido.historico[pedido.historico.length - 1];
+                const orderCard = `
                       <div class="card">
                           <div class="tracking-card">
                               <div class="card-header">
@@ -104,18 +94,19 @@
                           </div>
                       </div>
                   `;
-                  pedidosContainer.innerHTML += orderCard;
-              });
+                pedidosContainer.innerHTML += orderCard;
+            });
 
-          } catch (error) {
-              console.error('Erro ao carregar pedidos:', error);
-              pedidosContainer.innerHTML = '<p>Erro ao carregar pedidos. Por favor, tente novamente.</p>';
-          }
-      });
+        } catch (error) {
+            console.error('Erro ao carregar pedidos:', error);
+            pedidosContainer.innerHTML = '<p>Erro ao carregar pedidos. Por favor, tente novamente.</p>';
+        }
+    });
 
-      function rastrearPedido(pedidoId) {
-          // Implement tracking logic here
-          console.log(`Rastreando pedido ${pedidoId}`);
-      }
-  </script>
+    function rastrearPedido(pedidoId) {
+        // Implement tracking logic here
+        console.log(`Rastreando pedido ${pedidoId}`);
+    }
+</script>
+
 </html>

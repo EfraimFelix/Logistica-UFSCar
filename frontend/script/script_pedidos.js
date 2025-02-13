@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			contents.forEach((c) => c.classList.add("hidden"))
 			document.getElementById(tab.dataset.tab).classList.remove("hidden")
 
-			indicator.style.transform = `translateX(${index * 100}px)`
+			indicator.style.transform = `translateX(${index * 95}px)`
 		})
 	})
 })
