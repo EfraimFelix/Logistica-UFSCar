@@ -18,7 +18,6 @@ async function login(event) {
 
         if (response.ok) {
             localStorage.setItem('token', data.token);
-            localStorage.setItem('user', JSON.stringify(data.user));
             window.location.href = './pedidos.html';
         } else {
             throw new Error(data.message || 'Falha no login');
@@ -75,6 +74,5 @@ function checkAuth() {
 // Logout function
 function logout() {
     localStorage.removeItem('token');
-    localStorage.removeItem('user');
     window.location.href = './login.html';
 }

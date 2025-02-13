@@ -123,6 +123,15 @@ img {
 	font-size: 18px;
 }
 
-.hidden {
-	display: none;
+.logout-btn {
+	padding: 8px 16px;
+	background-color: #ab03df;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.logout-btn:hover {
+	background-color: #8b569b;
 }

@@ -20,7 +20,8 @@
         <div class="header-menu">
             <a href="./index.html"><img src="./img/UFSCAR_logotipo.svg" alt="Logotipo UFSCAR"></a>
             <div class="header-login">
-                <a href="#">Logado</a>
+                <span id="userName"></span>
+                <button onclick="logout()" class="logout-btn">Logout</button>
             </div>
         </div>
     </header>
@@ -43,10 +44,9 @@
         </div>
         <div class="tab-content hidden" id="rastreio">Conteúdo de Rastreamento</div>
     </div>
-
-</html>
 </body>
 
+</html>
 <script>
     document.addEventListener('DOMContentLoaded', async function () {
         const pedidosContainer = document.getElementById('pedidos');
@@ -68,15 +68,16 @@
             const pedidos = await response.json();
             pedidosContainer.innerHTML = ''; // Clear existing content
 
+            console.log(pedidos);
             pedidos.forEach(pedido => {
-                const lastStatus = pedido.historico[pedido.historico.length - 1];
+                const lastStatus = pedido.status_atual;
                 const orderCard = `
                       <div class="card">
                           <div class="tracking-card">
                               <div class="card-header">
                                   <div class="order-info">
                                       <p>Data Pedido: <span>${new Date(pedido.previsao_entrega).toLocaleDateString()}</span></p>
-                                      <p>Enviar para: <strong>${pedido.campus_final}</strong></p>
+                                      <p>Enviar para: <strong>${pedido.campus_final_nome}</strong></p>
                                   </div>
                                   <div class="order-number">
                                       <p>Nº Pedido:</p>
@@ -86,7 +87,7 @@
                               <div class="card-body">
                                   <img src="./img/boxes.png" alt="Caixas" class="package-image">
                                   <div class="description">
-                                      <p><strong>Status:</strong> ${lastStatus ? lastStatus.status.nome : 'Pendente'}</p>
+                                      <p><strong>Status:</strong> ${lastStatus ? lastStatus.nome : 'Pendente'}</p>
                                       <p><strong>Valor:</strong> R$ ${pedido.valor_total}</p>
                                   </div>
                                   <button class="track-button" onclick="rastrearPedido(${pedido.id})">Rastrear</button>
@@ -104,9 +105,10 @@
     });
 
     function rastrearPedido(pedidoId) {
-        // Implement tracking logic here
         console.log(`Rastreando pedido ${pedidoId}`);
     }
 </script>
+
+<script src="./script/auth.js"></script>
 
 </html>
