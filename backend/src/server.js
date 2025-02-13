@@ -28,7 +28,7 @@ const swaggerOptions = {
             },
         ],
     },
-    apis: ['./swagger/*.js'],
+    apis: ['./src/swagger/*.js'],
 };
 
 
