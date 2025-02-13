@@ -17,53 +17,58 @@ router.get('/', authenticateToken, async (req, res) => {
                 p.campus_final,
                 p.previsao_entrega,
                 p.valor_total,
-                h.id AS historico_id,
+                ci.nome as campus_inicial_nome,
+                cf.nome as campus_final_nome,
                 h.latitude,
                 h.longitude,
-                h.status AS status_id,
-                h.data AS historico_data,
-                s.nome AS status_nome,
-                s.descricao AS status_descricao
+                s.id as status_id,
+                s.nome as status_nome,
+                s.descricao as status_descricao,
+                h.data as historico_data
             FROM Pedido p
-            LEFT JOIN Historico h ON p.id = h.id_pedido
+            LEFT JOIN campus ci ON p.campus_inicial = ci.id
+            LEFT JOIN campus cf ON p.campus_final = cf.id
+            LEFT JOIN (
+                SELECT DISTINCT ON (id_pedido) 
+                    id_pedido,
+                    id,
+                    latitude,
+                    longitude,
+                    status,
+                    data
+                FROM Historico
+                ORDER BY id_pedido, data DESC
+            ) h ON p.id = h.id_pedido
             LEFT JOIN Status s ON h.status = s.id
-            WHERE id_usuario = ${req.user.id}
-            ORDER BY p.id, h.data;
+            WHERE p.id_usuario = ${req.user.id}
+            ORDER BY p.id;
         `;
 
         const result = await pool.query(query);
         
         const pedidosMap = {};
         for (const row of result.rows) {
-            if (!pedidosMap[row.pedido_id]) {
-                pedidosMap[row.pedido_id] = {
-                    id: row.pedido_id,
-                    id_usuario: row.id_usuario,
-                    campus_inicial: row.campus_inicial,
-                    campus_final: row.campus_final,
-                    previsao_entrega: row.previsao_entrega,
-                    valor_total: row.valor_total,
-                    historico: [],
-                };
-            }
-
-            if (row.historico_id) {
-                pedidosMap[row.pedido_id].historico.push({
-                    id: row.historico_id,
+            pedidosMap[row.pedido_id] = {
+                id: row.pedido_id,
+                id_usuario: row.id_usuario,
+                campus_inicial: row.campus_inicial,
+                campus_inicial_nome: row.campus_inicial_nome,
+                campus_final: row.campus_final,
+                campus_final_nome: row.campus_final_nome,
+                previsao_entrega: row.previsao_entrega,
+                valor_total: row.valor_total,
+                status_atual: {
+                    id: row.status_id,
+                    nome: row.status_nome,
+                    descricao: row.status_descricao,
                     latitude: row.latitude,
                     longitude: row.longitude,
-                    status: {
-                        id: row.status_id,
-                        nome: row.status_nome,
-                        descricao: row.status_descricao,
-                    },
-                    data: row.historico_data,
-                });
-            }
+                    data: row.historico_data
+                }
+            };
         }
 
         const pedidos = Object.values(pedidosMap);
-
         res.json(pedidos);
     } catch (err) {
         res.status(500).send({ message: err.message });

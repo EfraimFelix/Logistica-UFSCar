@@ -78,15 +78,16 @@
               const pedidos = await response.json();
               pedidosContainer.innerHTML = ''; // Clear existing content
 
+              console.log(pedidos);
               pedidos.forEach(pedido => {
-                  const lastStatus = pedido.historico[pedido.historico.length - 1];
+                  const lastStatus = pedido.status_atual;
                   const orderCard = `
                       <div class="card">
                           <div class="tracking-card">
                               <div class="card-header">
                                   <div class="order-info">
                                       <p>Data Pedido: <span>${new Date(pedido.previsao_entrega).toLocaleDateString()}</span></p>
-                                      <p>Enviar para: <strong>${pedido.campus_final}</strong></p>
+                                      <p>Enviar para: <strong>${pedido.campus_final_nome}</strong></p>
                                   </div>
                                   <div class="order-number">
                                       <p>Nº Pedido:</p>
@@ -96,7 +97,7 @@
                               <div class="card-body">
                                   <img src="./img/boxes.png" alt="Caixas" class="package-image">
                                   <div class="description">
-                                      <p><strong>Status:</strong> ${lastStatus ? lastStatus.status.nome : 'Pendente'}</p>
+                                      <p><strong>Status:</strong> ${lastStatus ? lastStatus.nome : 'Pendente'}</p>
                                       <p><strong>Valor:</strong> R$ ${pedido.valor_total}</p>
                                   </div>
                                   <button class="track-button" onclick="rastrearPedido(${pedido.id})">Rastrear</button>
