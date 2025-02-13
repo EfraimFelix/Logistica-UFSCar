@@ -104,9 +104,61 @@
         }
     });
 
-    function rastrearPedido(pedidoId) {
-        console.log(`Rastreando pedido ${pedidoId}`);
-    }
+    document.addEventListener("DOMContentLoaded", async function () {
+        const rastreioContainer = document.getElementById("rastreio");
+
+        try {
+            const token = localStorage.getItem('token'); // Get stored JWT token
+            const response = await fetch('http://localhost:3000/rastreio', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Falha ao carregar pedidos');
+            }
+            const rastreio = await response.json();
+            rastreioContainer.innerHTML = ''; // Clear existing content
+
+        } catch (error) {
+
+        }
+
+        cardData.forEach((data, index) => {
+            const card = document.createElement("div");
+            card.classList.add("tracking-card");
+
+            if (index !== 0 && index !== cardData.length - 1) {
+                const line = document.createElement("div");
+                line.classList.add("tracking-line");
+                card.appendChild(line);
+            }
+
+            card.innerHTML += `
+            <div class="card-header">
+                <div>Data Pedido: <span>09/02/2025</span></div>
+                <div>Nº Pedido: <strong>0101010101010101</strong></div>
+            </div>
+            <div class="card-body">
+                <img class="location-icon" src="./img/location 1.svg" alt="Localização ícone">
+                <div>
+                    <p><strong>Latitude e Longitude</strong></p>
+                    <p>${data.location}</p>
+                </div>
+                <div>
+                    <p><strong>Status:</strong></p>
+                    <p class="status">${data.status}</p>
+                </div>
+            </div>
+        `;
+
+            container.appendChild(card);
+        });
+    });
+
 </script>
 
 <script src="./script/auth.js"></script>

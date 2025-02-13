@@ -135,3 +135,60 @@ img {
 .logout-btn:hover {
 	background-color: #8b569b;
 }
+
+.card-container {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	align-items: center;
+}
+
+.tracking-card {
+	background: white;
+	border-radius: 10px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	width: 400px;
+	padding: 20px;
+	position: relative;
+	overflow: hidden;
+}
+
+.tracking-line {
+	position: absolute;
+	top: -30px;
+	left: 50%;
+	width: 3px;
+	height: 30px;
+	background: #f4a460;
+	transform: translateX(-50%);
+}
+
+.card-header {
+	background: #ccc;
+	padding: 10px;
+	display: flex;
+	justify-content: space-between;
+	font-size: 14px;
+}
+
+.card-header span,
+.card-header strong {
+	font-weight: bold;
+}
+
+.card-body {
+	display: flex;
+	justify-content: space-between;
+	padding: 15px;
+	align-items: center;
+}
+
+.location-icon {
+	font-size: 40px;
+	color: #f4a460;
+}
+
+.status {
+	font-weight: bold;
+	color: #666;
+}
