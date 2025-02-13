@@ -16,3 +16,17 @@ document.addEventListener("DOMContentLoaded", function () {
 		})
 	})
 })
+
+function changeTab() {
+	const tabPed = document.getElementById("tab-pedido")
+	const tabRas = document.getElementById("tab-rastreio")
+	
+	if (tabPed.classList.contains("active")){
+		tabPed.classList.remove("active")
+		tabPed.classList.add("active")
+	}
+	else{
+		tabRas.classList.remove("active")
+		tabPed.classList.add("active")
+	}
+}

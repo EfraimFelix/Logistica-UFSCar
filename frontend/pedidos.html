@@ -4,8 +4,12 @@
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit">
     <script src="./script/script_pedidos.js"></script>
@@ -34,8 +38,8 @@
     <div class="tab_geral">
         <div class="tab-container">
             <div class="tabs">
-                <button class="tab active" data-tab="pedidos">Pedidos</button>
-                <button class="tab" data-tab="rastreio">Rastreio</button>
+                <button class="tab active" data-tab="pedidos" id="tab-pedido" onclick="getPedidos()">Pedidos</button>
+                <button class="tab" data-tab="rastreio" id="tab-rastreio">Rastreio</button>
             </div>
             <div class="tab-indicator"></div>
         </div>
@@ -48,7 +52,10 @@
 
 </html>
 <script>
-    document.addEventListener('DOMContentLoaded', async function () {
+
+    getPedidos();
+
+    async function getPedidos(params) {
         const pedidosContainer = document.getElementById('pedidos');
 
         try {
@@ -68,7 +75,6 @@
             const pedidos = await response.json();
             pedidosContainer.innerHTML = ''; // Clear existing content
 
-            console.log(pedidos);
             pedidos.forEach(pedido => {
                 const lastStatus = pedido.status_atual;
                 const orderCard = `
@@ -90,7 +96,7 @@
                                       <p><strong>Status:</strong> ${lastStatus ? lastStatus.nome : 'Pendente'}</p>
                                       <p><strong>Valor:</strong> R$ ${pedido.valor_total}</p>
                                   </div>
-                                  <button class="track-button" onclick="rastrearPedido(${pedido.id})">Rastrear</button>
+                                  <button class="track-button" onclick="getHistorico('${pedido.id}')">Rastrear</button>
                               </div>
                           </div>
                       </div>
@@ -102,14 +108,22 @@
             console.error('Erro ao carregar pedidos:', error);
             pedidosContainer.innerHTML = '<p>Erro ao carregar pedidos. Por favor, tente novamente.</p>';
         }
-    });
+    }
 
-    document.addEventListener("DOMContentLoaded", async function () {
-        const rastreioContainer = document.getElementById("rastreio");
+
+    async function getHistorico(idPedido) {
+
+        const tabPed = document.getElementById("tab-pedido")
+	    const tabRas = document.getElementById("tab-rastreio")
+
+		tabPed.classList.remove("active")
+		tabRas.classList.add("active")
+
+        const pedidosContainer = document.getElementById('pedidos');
 
         try {
             const token = localStorage.getItem('token'); // Get stored JWT token
-            const response = await fetch('http://localhost:3000/rastreio', {
+            const response = await fetch(`http://localhost:3000/pedido/${idPedido}/historico`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -117,47 +131,44 @@
                 }
             });
 
-            if (!response.ok) {
-                throw new Error('Falha ao carregar pedidos');
-            }
-            const rastreio = await response.json();
-            rastreioContainer.innerHTML = ''; // Clear existing content
+            pedidosContainer.innerHTML = ''; // Clear existing content
+            const historico = await response.json();
 
-        } catch (error) {
+            historico.forEach((data, index) => {
+                const card = document.createElement("div");
+                card.classList.add("tracking-card");
 
-        }
-
-        cardData.forEach((data, index) => {
-            const card = document.createElement("div");
-            card.classList.add("tracking-card");
-
-            if (index !== 0 && index !== cardData.length - 1) {
-                const line = document.createElement("div");
-                line.classList.add("tracking-line");
-                card.appendChild(line);
-            }
-
-            card.innerHTML += `
+                card.innerHTML += `
             <div class="card-header">
-                <div>Data Pedido: <span>09/02/2025</span></div>
-                <div>Nº Pedido: <strong>0101010101010101</strong></div>
+                <div>Data Pedido: <span>${new Date(data.data).toLocaleDateString()}</span></div>
+                <div>Nº Pedido: <strong>${idPedido}</strong></div>
             </div>
             <div class="card-body">
                 <img class="location-icon" src="./img/location 1.svg" alt="Localização ícone">
                 <div>
                     <p><strong>Latitude e Longitude</strong></p>
-                    <p>${data.location}</p>
+                    <p>${data.latitude} | ${data.longitude}</p>
                 </div>
                 <div>
                     <p><strong>Status:</strong></p>
-                    <p class="status">${data.status}</p>
+                    <p class="status">${data.status.nome}</p>
                 </div>
             </div>
         `;
 
-            container.appendChild(card);
-        });
-    });
+                pedidosContainer.appendChild(card);
+            });
+
+            if (!response.ok) {
+                throw new Error('Falha ao carregar pedidos');
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
 
 </script>
 
