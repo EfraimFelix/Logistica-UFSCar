@@ -4,8 +4,12 @@
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit">
     <link rel="icon" href="./img/boxes.png">
@@ -68,14 +72,73 @@
                     </div>
                 </div>
             </div>
+            <div class="card">
+                <div class="tracking-card">
+                    <div class="card-header">
+                        <div class="order-info">
+                            <p>Data Pedido: <span>09/02/2025</span></p>
+                            <p>Enviar para: <strong>UNICAMP</strong></p>
+                        </div>
+                        <div class="order-number">
+                            <p>Nº Pedido:</p>
+                            <p>0101010101010101</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <img src="./img/boxes.png" alt="Caixas" class="package-image">
+                        <div class="description">
+                            <p><strong>Descrição:</strong></p>
+                            <p>lorem ipsum lorem ipsum</p>
+                        </div>
+                        <button class="track-button">Rastrear</button>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="tab-content hidden" id="rastreio">Conteúdo de Rastreamento</div>
     </div>
 
 </html>
-
-
-
 </body>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const pedidosContainer = document.getElementById('pedidos');
+
+        // Clear existing content
+        pedidosContainer.innerHTML = '';
+
+        // Generate 10 orders
+        for (let i = 1; i <= 10; i++) {
+            const orderNumber = String(i).padStart(16, '0');
+            const orderCard = `
+            <div class="card">
+                <div class="tracking-card">
+                    <div class="card-header">
+                        <div class="order-info">
+                            <p>Data Pedido: <span>09/02/2024</span></p>
+                            <p>Enviar para: <strong>UNICAMP</strong></p>
+                        </div>
+                        <div class="order-number">
+                            <p>Nº Pedido:</p>
+                            <p>${orderNumber}</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <img src="./img/boxes.png" alt="Caixas" class="package-image">
+                        <div class="description">
+                            <p><strong>Descrição:</strong></p>
+                            <p>Pedido ${i} - Material para laboratório</p>
+                        </div>
+                        <button class="track-button">Rastrear</button>
+                    </div>
+                </div>
+            </div>
+        `;
+            pedidosContainer.innerHTML += orderCard;
+        }
+    });
+</script>
 
 </html>
