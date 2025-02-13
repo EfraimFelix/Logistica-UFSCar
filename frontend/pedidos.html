@@ -30,7 +30,8 @@
                 </ul>
             </nav>
             <div class="header-login">
-                <a href="#">Logado</a>
+                <span id="userName"></span>
+                <button onclick="logout()" class="logout-btn">Logout</button>
             </div>
         </div>
     </header>
@@ -53,35 +54,34 @@
         </div>
         <div class="tab-content hidden" id="rastreio">Conteúdo de Rastreamento</div>
     </div>
-
-</html>
 </body>
 
-  <script>
-      document.addEventListener('DOMContentLoaded', async function () {
-          const pedidosContainer = document.getElementById('pedidos');
-        
-          try {
-              const token = localStorage.getItem('token'); // Get stored JWT token
-              const response = await fetch('http://localhost:3000/pedido', {
-                  method: 'GET',
-                  headers: {
-                      'Authorization': `Bearer ${token}`,
-                      'Content-Type': 'application/json'
-                  }
-              });
+</html>
+<script>
+    document.addEventListener('DOMContentLoaded', async function () {
+        const pedidosContainer = document.getElementById('pedidos');
 
-              if (!response.ok) {
-                  throw new Error('Falha ao carregar pedidos');
-              }
+        try {
+            const token = localStorage.getItem('token'); // Get stored JWT token
+            const response = await fetch('http://localhost:3000/pedido', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
 
-              const pedidos = await response.json();
-              pedidosContainer.innerHTML = ''; // Clear existing content
+            if (!response.ok) {
+                throw new Error('Falha ao carregar pedidos');
+            }
 
-              console.log(pedidos);
-              pedidos.forEach(pedido => {
-                  const lastStatus = pedido.status_atual;
-                  const orderCard = `
+            const pedidos = await response.json();
+            pedidosContainer.innerHTML = ''; // Clear existing content
+
+            console.log(pedidos);
+            pedidos.forEach(pedido => {
+                const lastStatus = pedido.status_atual;
+                const orderCard = `
                       <div class="card">
                           <div class="tracking-card">
                               <div class="card-header">
@@ -105,18 +105,20 @@
                           </div>
                       </div>
                   `;
-                  pedidosContainer.innerHTML += orderCard;
-              });
+                pedidosContainer.innerHTML += orderCard;
+            });
 
-          } catch (error) {
-              console.error('Erro ao carregar pedidos:', error);
-              pedidosContainer.innerHTML = '<p>Erro ao carregar pedidos. Por favor, tente novamente.</p>';
-          }
-      });
+        } catch (error) {
+            console.error('Erro ao carregar pedidos:', error);
+            pedidosContainer.innerHTML = '<p>Erro ao carregar pedidos. Por favor, tente novamente.</p>';
+        }
+    });
 
-      function rastrearPedido(pedidoId) {
-          // Implement tracking logic here
-          console.log(`Rastreando pedido ${pedidoId}`);
-      }
-  </script>
+    function rastrearPedido(pedidoId) {
+        console.log(`Rastreando pedido ${pedidoId}`);
+    }
+</script>
+
+<script src="./script/auth.js"></script>
+
 </html>
