@@ -4,7 +4,9 @@
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tela de Login</title>
@@ -16,15 +18,16 @@
         <aside class="logo-section">
             <a href="./index.html"><img src="./img/UFSCAR_logotipo-completo.svg" alt="Logotipo" class="logo"></a>
         </aside>
-        <form class="login-form">
+        <form class="login-form" onsubmit="register(event)">
             <h2>Cadastre-se</h2>
-            <input class="input" type="text" placeholder="Nome">
-            <input class="input" type="text" placeholder="Sobrenome">
-            <input class="input" type="text" placeholder="Usuário">
-            <input class="input" type="password" placeholder="Senha" required>
+            <div id="error-message"></div>
+            <input type="text" id="nome" required placeholder="Nome">
+            <input type="text" id="sobrenome" required placeholder="Sobrenome">
+            <input type="email" id="email" required placeholder="Email">
+            <input type="password" id="senha" required placeholder="Senha">
             <button type="submit">Cadastrar</button>
             <p>
-                Já tem cadastro? <a href="" class="cor">Entrar</a>
+                Já tem cadastro? <a href="./login.html" class="cor">Entrar</a>
             </p>
         </form>
 
@@ -32,3 +35,5 @@
 </body>
 
 </html>
+
+<script src="script/auth.js"></script>

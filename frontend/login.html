@@ -16,13 +16,14 @@
         <aside class="logo-section">
             <a href="./index.html"><img src="./img/UFSCAR_logotipo-completo.svg" alt="Logotipo" class="logo"></a>
         </aside>
-        <form class="login-form">
+        <form onsubmit="login(event)" class="login-form">
             <h2>Login</h2>
-            <input class="input" type="text" placeholder="Usuário">
-            <input class="input" type="password" placeholder="Senha" required>
+            <div id="error-message"></div>
+            <input class="input" type="email" id="email" required placeholder="Email">
+            <input class="input" type="password" id="senha" required placeholder="Senha">
             <button type="submit">Entrar</button>
             <p>
-                Não tem cadastro? <a href="" class="cor">Cadastre-se</a>
+                Não tem cadastro? <a href="./cadastrar.html" class="cor">Cadastre-se</a>
             </p>
         </form>
 
@@ -30,3 +31,5 @@
 </body>
 
 </html>
+
+<script src="script/auth.js"></script>
