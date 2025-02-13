@@ -30,13 +30,13 @@
                 </ul>
             </nav>
             <div class="header-login">
-                <a href="./login.html">Logado</a>
+                <a href="#">Logado</a>
             </div>
         </div>
     </header>
 
     <div>
-        <img class="pedidos_blooper" src="/img/Pedidos.svg" alt="Blooper_pedidos">
+        <img class="pedidos_blooper" src="./img/Pedidos.svg" alt="Blooper_pedidos">
     </div>
 
 
@@ -50,50 +50,6 @@
         </div>
 
         <div class="tab-content" id="pedidos"><!-- Card -->
-            <div class="card">
-                <div class="tracking-card">
-                    <div class="card-header">
-                        <div class="order-info">
-                            <p>Data Pedido: <span>09/02/2025</span></p>
-                            <p>Enviar para: <strong>UNICAMP</strong></p>
-                        </div>
-                        <div class="order-number">
-                            <p>Nº Pedido:</p>
-                            <p>0101010101010101</p>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <img src="./img/boxes.png" alt="Caixas" class="package-image">
-                        <div class="description">
-                            <p><strong>Descrição:</strong></p>
-                            <p>lorem ipsum lorem ipsum</p>
-                        </div>
-                        <button class="track-button">Rastrear</button>
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="tracking-card">
-                    <div class="card-header">
-                        <div class="order-info">
-                            <p>Data Pedido: <span>09/02/2025</span></p>
-                            <p>Enviar para: <strong>UNICAMP</strong></p>
-                        </div>
-                        <div class="order-number">
-                            <p>Nº Pedido:</p>
-                            <p>0101010101010101</p>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <img src="./img/boxes.png" alt="Caixas" class="package-image">
-                        <div class="description">
-                            <p><strong>Descrição:</strong></p>
-                            <p>lorem ipsum lorem ipsum</p>
-                        </div>
-                        <button class="track-button">Rastrear</button>
-                    </div>
-                </div>
-            </div>
         </div>
         <div class="tab-content hidden" id="rastreio">Conteúdo de Rastreamento</div>
     </div>
@@ -101,44 +57,65 @@
 </html>
 </body>
 
+  <script>
+      document.addEventListener('DOMContentLoaded', async function () {
+          const pedidosContainer = document.getElementById('pedidos');
+        
+          try {
+              const token = localStorage.getItem('token'); // Get stored JWT token
+              const response = await fetch('http://localhost:3000/pedido', {
+                  method: 'GET',
+                  headers: {
+                      'Authorization': `Bearer ${token}`,
+                      'Content-Type': 'application/json'
+                  }
+              });
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const pedidosContainer = document.getElementById('pedidos');
+              if (!response.ok) {
+                  throw new Error('Falha ao carregar pedidos');
+              }
 
-        // Clear existing content
-        pedidosContainer.innerHTML = '';
+              const pedidos = await response.json();
+              pedidosContainer.innerHTML = ''; // Clear existing content
 
-        // Generate 10 orders
-        for (let i = 1; i <= 10; i++) {
-            const orderNumber = String(i).padStart(16, '0');
-            const orderCard = `
-            <div class="card">
-                <div class="tracking-card">
-                    <div class="card-header">
-                        <div class="order-info">
-                            <p>Data Pedido: <span>09/02/2024</span></p>
-                            <p>Enviar para: <strong>UNICAMP</strong></p>
-                        </div>
-                        <div class="order-number">
-                            <p>Nº Pedido:</p>
-                            <p>${orderNumber}</p>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <img src="./img/boxes.png" alt="Caixas" class="package-image">
-                        <div class="description">
-                            <p><strong>Descrição:</strong></p>
-                            <p>Pedido ${i} - Material para laboratório</p>
-                        </div>
-                        <button class="track-button">Rastrear</button>
-                    </div>
-                </div>
-            </div>
-        `;
-            pedidosContainer.innerHTML += orderCard;
-        }
-    });
-</script>
+              pedidos.forEach(pedido => {
+                  const lastStatus = pedido.historico[pedido.historico.length - 1];
+                  const orderCard = `
+                      <div class="card">
+                          <div class="tracking-card">
+                              <div class="card-header">
+                                  <div class="order-info">
+                                      <p>Data Pedido: <span>${new Date(pedido.previsao_entrega).toLocaleDateString()}</span></p>
+                                      <p>Enviar para: <strong>${pedido.campus_final}</strong></p>
+                                  </div>
+                                  <div class="order-number">
+                                      <p>Nº Pedido:</p>
+                                      <p>${pedido.id}</p>
+                                  </div>
+                              </div>
+                              <div class="card-body">
+                                  <img src="./img/boxes.png" alt="Caixas" class="package-image">
+                                  <div class="description">
+                                      <p><strong>Status:</strong> ${lastStatus ? lastStatus.status.nome : 'Pendente'}</p>
+                                      <p><strong>Valor:</strong> R$ ${pedido.valor_total}</p>
+                                  </div>
+                                  <button class="track-button" onclick="rastrearPedido(${pedido.id})">Rastrear</button>
+                              </div>
+                          </div>
+                      </div>
+                  `;
+                  pedidosContainer.innerHTML += orderCard;
+              });
 
+          } catch (error) {
+              console.error('Erro ao carregar pedidos:', error);
+              pedidosContainer.innerHTML = '<p>Erro ao carregar pedidos. Por favor, tente novamente.</p>';
+          }
+      });
+
+      function rastrearPedido(pedidoId) {
+          // Implement tracking logic here
+          console.log(`Rastreando pedido ${pedidoId}`);
+      }
+  </script>
 </html>
