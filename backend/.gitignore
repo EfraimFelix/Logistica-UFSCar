@@ -5,3 +5,7 @@ src/.env
 .vscode/
 
 package-lock.json
+
+src/coverage/
+
+src/test-report.html
