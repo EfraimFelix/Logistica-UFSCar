@@ -75,4 +75,46 @@ router.get('/', authenticateToken, async (req, res) => {
     }
 });
 
+router.get('/:id/historico', authenticateToken, async (req, res) => {
+    try {
+        if (!req.user) {
+            return res.status(403).json({ message: 'Acesso negado. Apenas usuarios logados podem ver histórico.' });
+        }
+
+        const query = `
+            SELECT 
+                h.id,
+                h.latitude,
+                h.longitude,
+                h.data,
+                s.id as status_id,
+                s.nome as status_nome,
+                s.descricao as status_descricao
+            FROM Historico h
+            JOIN Status s ON h.status = s.id
+            JOIN Pedido p ON h.id_pedido = p.id
+            WHERE h.id_pedido = $1 AND p.id_usuario = $2
+            ORDER BY h.data ASC;
+        `;
+
+        const result = await pool.query(query, [req.params.id, req.user.id]);
+        
+        const historico = result.rows.map(row => ({
+            id: row.id,
+            latitude: row.latitude,
+            longitude: row.longitude,
+            data: row.data,
+            status: {
+                id: row.status_id,
+                nome: row.status_nome,
+                descricao: row.status_descricao
+            }
+        }));
+
+        res.json(historico);
+    } catch (err) {
+        res.status(500).send({ message: err.message });
+    }
+});
+
 module.exports = router;
