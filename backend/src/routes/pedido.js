@@ -66,7 +66,7 @@ router.get('/', authenticateToken, async (req, res) => {
 
         res.json(pedidos);
     } catch (err) {
-        res.status(500).send(err.message);
+        res.status(500).send({ message: err.message });
     }
 });
 

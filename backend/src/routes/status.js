@@ -7,8 +7,7 @@ router.get('/', async (req, res) => {
         const result = await pool.query('SELECT * FROM Status');
         res.json(result.rows);
     } catch (err) {
-        console.log(err)
-        res.status(500).send(err.message);
+        res.status(500).send({ message: err.message });
     }
 });
 
