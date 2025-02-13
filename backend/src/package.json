@@ -1,0 +1,30 @@
+{
+  "name": "src",
+  "version": "1.0.0",
+  "description": "",
+  "main": "db.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-html-reporter": "^4.0.1",
+    "supertest": "^7.0.0"
+  },
+  "jest": {
+  "collectCoverage": true,
+  "coverageDirectory": "coverage",
+  "coverageReporters": ["json", "html"],
+  "reporters": [
+    "default",
+    ["jest-html-reporter", {
+      "pageTitle": "Relatório de Testes",
+      "outputPath": "test-report.html"
+    }]
+  ]
+  }
+}
